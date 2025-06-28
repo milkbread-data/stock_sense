@@ -1,5 +1,5 @@
 [project]
-name = "stock-prediction-app"
+name = "stock_predictor"
 version = "0.1.0"
 description = "Web application for stock price prediction using AutoGluon"
 authors = [
