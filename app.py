@@ -105,9 +105,13 @@ def plot_stock_data(
     # Prepare and add predictions
     pred_df_plot = predictions.copy()
     pred_df_plot = pred_df_plot.rename(columns={"mean": "value"})
+    
+    # Use timestamp column for x-axis
+    x_column = "timestamp" if "timestamp" in pred_df_plot.columns else "date"
+    
     fig.add_trace(
         go.Scatter(
-            x=pred_df_plot["date"],
+            x=pred_df_plot[x_column],
             y=pred_df_plot["value"],
             mode="lines",
             name="Predicted",
@@ -119,9 +123,13 @@ def plot_stock_data(
     if actuals is not None and not actuals.empty:
         actuals_plot = actuals.copy()
         actuals_plot = actuals_plot.rename(columns={"Close": "value"})
+        
+        # Use timestamp column for x-axis
+        x_column = "timestamp" if "timestamp" in actuals_plot.columns else "date"
+        
         fig.add_trace(
             go.Scatter(
-                x=actuals_plot["date"],
+                x=actuals_plot[x_column],
                 y=actuals_plot["value"],
                 mode="lines",
                 name="Actual",
@@ -131,9 +139,12 @@ def plot_stock_data(
 
     # Add confidence interval if available
     if "0.9" in predictions.columns:
+        # Use timestamp column for x-axis
+        x_column = "timestamp" if "timestamp" in predictions.columns else "date"
+        
         fig.add_trace(
             go.Scatter(
-                x=pd.concat([predictions["date"], predictions["date"][::-1]]),
+                x=pd.concat([predictions[x_column], predictions[x_column][::-1]]),
                 y=pd.concat([predictions["0.9"], predictions["0.1"][::-1]]),
                 fill="toself",
                 fillcolor="rgba(255, 127, 14, 0.2)",
